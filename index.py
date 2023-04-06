@@ -9,6 +9,10 @@ def sum(x, y):
 def index():
     return app.send_static_file('index.html')
 
+@app.route('/sub')
+def sub():
+    return "This is Sub Page!"
+
 if __name__ == "__main__":
     num1 = int(sys.argv[1])
     num2 = int(sys.argv[2])
