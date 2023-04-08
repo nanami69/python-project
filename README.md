@@ -3,4 +3,4 @@
 - This is my objective to learn python 
 
 ## dev
-- Code Execution: `python index.py {num1} {num2}`
+- Code Execution: `python index.py`
