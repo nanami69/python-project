@@ -5,7 +5,13 @@
 </head>
 <body>
 <p>Hello World</p>
-<h2>My name is {{ name }}</h2>
+<h1>My name is {{ name }}</h2>
+<form method="POST">
+    <label for="textbox">記事のタイトル：</label>
+    <input type="text" id="textbox" name="textbox">
+    <br>
+    <input type="submit" value="送信">
+</form>      
 <a href="./sub">click</a>
 </body>
 </html>
