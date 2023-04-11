@@ -1,7 +1,15 @@
 import os
 import sqlite3
 
-from database import DB_FILEPATH, CREATE_TABLE_SQL, initialize_database
+import pytest
+
+from database import DB_FILEPATH, CREATE_TABLE_SQL, initialize_database, save_news_summary
+
+@pytest.fixture
+def db_connection():
+    conn = sqlite3.connect(DB_FILEPATH)
+    yield conn
+    conn.close()
 
 def setup_module(module):
     initialize_database()
@@ -35,3 +43,12 @@ def test_create_table():
     assert actual_columns == expected_columns
 
     conn.close()
+
+def test_save_news_summary(db_connection):
+    title = "Test Title"
+    summary = "Test Summary"
+    save_news_summary(title, summary)
+
+    cursor = db_connection.cursor()
+    cursor.execute(f"SELECT COUNT(*) FROM news_summary WHERE title = '{title}' AND summary = '{summary}'")
+    assert cursor.fetchone()[0] == 1
