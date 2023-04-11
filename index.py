@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
+from database import initialize_database, save_news_summary, DB_FILEPATH
 import requests
 import os
+import sqlite3
 app = Flask(__name__)
 
 def generate_summary(prompt):
@@ -29,12 +31,26 @@ def index():
     if request.method == 'POST':
         title = request.form['textbox']
         summary = generate_summary(f"title and summarize {title}")
-        return f"Summary: {summary}"
+        save_news_summary(title, summary)
+        return render_template('article.html', summary=summary)
     return render_template('index.html', name=name)
 
 @app.route('/sub')
 def sub():
     return "This is Sub Page!"
 
+@app.route('/list')
+def list():
+    conn = sqlite3.connect(DB_FILEPATH)
+    cursor = conn.cursor()
+    select_sql = """
+        SELECT title, summary FROM news_summary
+    """
+    cursor.execute(select_sql)
+    rows = cursor.fetchall()
+    conn.close()
+    return render_template('list.html', rows=rows)
+
 if __name__ == "__main__":
     app.run()
+    initialize_database()

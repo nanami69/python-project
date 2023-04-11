@@ -29,3 +29,14 @@ def initialize_database():
 
     # データベースをクローズする
     conn.close()
+
+def save_news_summary(title, summary):
+    conn = sqlite3.connect(DB_FILEPATH)
+    cursor = conn.cursor()
+    insert_sql = """
+        INSERT INTO news_summary (title, summary)
+        VALUES (?, ?)
+    """
+    cursor.execute(insert_sql, (title, summary))
+    conn.commit()
+    conn.close()
