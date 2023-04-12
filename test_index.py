@@ -1,4 +1,4 @@
-from index import app, generate_summary
+from index import app, generate_summary, generate_question
 from database import DB_FILEPATH
 import sqlite3
 
@@ -38,3 +38,11 @@ def test_generate_summary():
     summary = generate_summary(prompt)
     assert isinstance(summary, str)
     assert len(summary) > 0
+
+def test_generate_question():
+    prompt = "ニューヨークで人気のある観光スポット"
+    question, question_en = generate_question(prompt)
+    assert isinstance(question, str)
+    assert len(question) > 0
+    assert isinstance(question_en, str)
+    assert len(question_en) > 0

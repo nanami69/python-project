@@ -37,7 +37,7 @@ def test_create_table():
     assert result[0] == "news_summary"
 
     # テーブルのカラムが想定通りかどうか確認する
-    expected_columns = ["id", "title", "summary", "created_at"]
+    expected_columns = ["id", "title", "summary", "question", "question_en", "created_at"]
     result = cursor.execute("PRAGMA table_info(news_summary)").fetchall()
     actual_columns = [column[1] for column in result]
     assert actual_columns == expected_columns
@@ -47,8 +47,10 @@ def test_create_table():
 def test_save_news_summary(db_connection):
     title = "Test Title"
     summary = "Test Summary"
-    save_news_summary(title, summary)
+    question = "Test Question"
+    question_en = "Test Question(English)"
+    save_news_summary(title, summary, question, question_en)
 
     cursor = db_connection.cursor()
-    cursor.execute(f"SELECT COUNT(*) FROM news_summary WHERE title = '{title}' AND summary = '{summary}'")
+    cursor.execute(f"SELECT COUNT(*) FROM news_summary WHERE title = '{title}' AND summary = '{summary}' AND question = '{question}' AND question_en = '{question_en}'")
     assert cursor.fetchone()[0] == 1
