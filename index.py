@@ -25,14 +25,14 @@ def generate_summary(prompt):
     return summary
 
 def generate_question(prompt):
-    prompt_text1 = f"「{prompt}」という記事に関する簡単な質問を１つ日本語で作って下さい。500トークンで収まる内容でお願いします。"
+    prompt_text1 = f"「{prompt}」という記事に関する簡単な質問を1つ日本語で作って下さい。1000トークンで収まる内容でお願いします。"
     data1 = {**data_template, "prompt": prompt_text1}
 
     response1 = requests.post("https://api.openai.com/v1/completions", headers=headers, json=data1)
     response_json1 = response1.json()
     question = response_json1["choices"][0]["text"].strip()
 
-    prompt_text2 = f"「{question}」を英語に直して下さい。500トークンで収まる内容でお願いします。"
+    prompt_text2 = f"「{question}」を英語に直して下さい。1000トークンで収まる内容でお願いします。"
     data2 = {**data_template, "prompt": prompt_text2}
 
     response2 = requests.post("https://api.openai.com/v1/completions", headers=headers, json=data2)
