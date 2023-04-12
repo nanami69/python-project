@@ -10,6 +10,8 @@ CREATE TABLE news_summary (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     summary TEXT NOT NULL,
+    question TEXT NOT NULL,
+    question_en TEXT NOT NULL,
     created_at DATETIME DEFAULT (DATETIME('now', 'localtime'))
 );
 """
@@ -30,13 +32,13 @@ def initialize_database():
     # データベースをクローズする
     conn.close()
 
-def save_news_summary(title, summary):
+def save_news_summary(title, summary, question, question_en):
     conn = sqlite3.connect(DB_FILEPATH)
     cursor = conn.cursor()
     insert_sql = """
-        INSERT INTO news_summary (title, summary)
-        VALUES (?, ?)
+        INSERT INTO news_summary (title, summary, question, question_en)
+        VALUES (?, ?, ?, ?)
     """
-    cursor.execute(insert_sql, (title, summary))
+    cursor.execute(insert_sql, (title, summary, question, question_en))
     conn.commit()
     conn.close()
