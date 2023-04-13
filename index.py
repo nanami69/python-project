@@ -52,10 +52,6 @@ def index():
         return render_template('article.html', summary=summary, question=question, question_en=question_en)
     return render_template('index.html', name=name)
 
-@app.route('/sub')
-def sub():
-    return "This is Sub Page!"
-
 @app.route('/list')
 def list():
     conn = sqlite3.connect(DB_FILEPATH)
