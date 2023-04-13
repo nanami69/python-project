@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from database import initialize_database, save_news_summary, DB_FILEPATH
 import requests
 import os
@@ -15,7 +15,7 @@ data_template = {
 }
 
 def generate_summary(prompt):
-    prompt_text = f"「{prompt}」という記事を1000トークンで収まる内容で日本語で要約してください。"
+    prompt_text = f"「{prompt}」という記事を1000トークンで収まる内容でわかりやすい日本語で要約してください。"
     data = {**data_template, "prompt": prompt_text}
 
     response = requests.post("https://api.openai.com/v1/completions", headers=headers, json=data)
@@ -25,7 +25,7 @@ def generate_summary(prompt):
     return summary
 
 def generate_question(prompt):
-    prompt_text1 = f"「{prompt}」という記事に関する簡単な質問を1つ日本語で作って下さい。1000トークンで収まる内容でお願いします。"
+    prompt_text1 = f"「{prompt}」の記事のジャンルにマッチした、小学生でも答えられるような身近な質問を1つ日本語で作って下さい。1000トークンで収まる内容でお願いします。"
     data1 = {**data_template, "prompt": prompt_text1}
 
     response1 = requests.post("https://api.openai.com/v1/completions", headers=headers, json=data1)
@@ -40,6 +40,10 @@ def generate_question(prompt):
     question_en = response_json2["choices"][0]["text"].strip()
 
     return question, question_en
+
+@app.route('/')
+def root():
+    return redirect(url_for('index'))
 
 @app.route('/index', methods=['GET', 'POST'])
 def index():
