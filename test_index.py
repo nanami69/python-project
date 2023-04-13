@@ -1,4 +1,5 @@
 from index import app, generate_summary, generate_question
+from flask import url_for
 from database import DB_FILEPATH
 import sqlite3
 
@@ -8,11 +9,11 @@ def test_index():
         assert response.status_code == 200
         assert b'<!DOCTYPE html>' in response.data
 
-def test_sub():
-    with app.test_client() as client:
-        response = client.get('/sub')
-        assert response.status_code == 200
-        assert b'This is Sub Page!' in response.data
+def test_root():
+    with app.test_request_context():
+        response = app.test_client().get('/')
+        assert response.status_code == 302
+        assert response.headers['Location'] == url_for('index')
 
 def test_list():
     with app.test_client() as client:
