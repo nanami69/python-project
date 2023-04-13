@@ -2,30 +2,48 @@
 <html>
 <head>
 	<title>Article</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<h1>Article Summary</h1>
-	<table>
-		<tr>
-			<th>Summary</th>
-		</tr>
-		<tr>
-			<td>{{ summary }}</td>
-		</tr>
-		<tr>
-			<th>Question</th>
-		</tr>
-		<tr>
-			<td>{{ question }}</td>
-		</tr>
-		<tr>
-			<th>Question(English)</th>
-		</tr>
-		<tr>
-			<td>{{ question_en }}</td>
-		</tr>
-	</table>
-    <br>
-    <a href="/list">display all</a>
+	<div class="container">
+		<h1 class="text-center">Article Summary</h1>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Summary</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ summary }}</td>
+				</tr>
+			</tbody>
+			<thead>
+				<tr>
+					<th>Question</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ question }}</td>
+				</tr>
+			</tbody>
+			<thead>
+				<tr>
+					<th>Question(English)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ question_en }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="text-center">
+			<a href="/list" class="btn btn-primary">Display All</a>
+		</div>
+	</div>
 </body>
 </html>
