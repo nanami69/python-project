@@ -61,7 +61,7 @@ def list():
     conn = sqlite3.connect(DB_FILEPATH)
     cursor = conn.cursor()
     select_sql = """
-        SELECT title, summary FROM news_summary
+        SELECT title, summary, question, question_en FROM news_summary
     """
     cursor.execute(select_sql)
     rows = cursor.fetchall()
