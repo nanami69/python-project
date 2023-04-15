@@ -1,7 +1,15 @@
-from index import app, generate_summary, generate_question
+from index import app, generate_summary, generate_question, request_openai_api
 from flask import url_for
 from database import DB_FILEPATH
 import sqlite3
+import pytest
+import requests
+from unittest import mock
+
+@pytest.fixture()
+def requests_mock():
+    with mock.patch('index.requests') as mock_requests:
+        yield mock_requests
 
 def test_index():
     with app.test_client() as client:
@@ -47,3 +55,23 @@ def test_generate_question():
     assert len(question) > 0
     assert isinstance(question_en, str)
     assert len(question_en) > 0
+
+def test_request_openai_api_successful(requests_mock):
+    # Mock API response
+    prompt_text = "Sample prompt"
+    expected_result = "Sample response"
+    requests_mock.post.return_value.json.return_value = {"choices": [{"text": expected_result}]}
+
+    # Call function and check result
+    result = request_openai_api(prompt_text)
+    assert result == expected_result
+
+def test_request_openai_api_error(requests_mock):
+    # Mock API response with error status code
+    prompt_text = "Sample prompt"
+    requests_mock.post.return_value.status_code = 500
+    requests_mock.post.side_effect = requests.exceptions.HTTPError()
+
+    # Call function and check that it raises an exception
+    with pytest.raises(ValueError, match="Invalid response from API: "):
+        request_openai_api(prompt_text)
