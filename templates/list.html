@@ -5,8 +5,13 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/styles/index.css">
+    <link rel="icon" type="image/png" href="../static/images/favicon.jpeg">
   </head>
   <body>
+    <header>
+      <img src="{{ url_for('static', filename='images/header.jpeg') }}" alt="Header Image" class="header">
+    </header>
     <div class="container">
       <div class="row">
         <div class="col-md-12">

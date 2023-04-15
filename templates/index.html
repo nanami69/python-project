@@ -6,19 +6,38 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/styles/index.css">
+    <link rel="icon" type="image/png" href="../static/images/favicon.jpeg">
 </head>
 <body>
-<div class="container">
-    <h1 class="text-center mt-5">Welcome to {{ name }}</h1>
-    <form method="POST">
-        <div class="form-group">
-            <label for="textbox" class="form-label">Article title</label>
-            <input type="text" class="form-control" id="textbox" name="textbox">
-        </div>
-        <div class="text-right">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-    </form>      
-</div>
+    <header>
+        <img src="{{ url_for('static', filename='images/header.jpeg') }}" alt="Header Image" class="header">
+    </header>
+    <div class="container">
+        <h1 class="text-center mt-5">Welcome to {{ name }}</h1>
+        <form method="POST" id="form">
+            <div class="form-group">
+                <label for="textbox" class="form-label">Article title</label>
+                <input type="text" class="form-control" id="textbox" name="textbox" oninput="checkTitle()">
+            </div>
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary" id="submit-btn" disabled>Submit</button>
+            </div>
+        </form>      
+    </div>
+    <script>
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.title = "Please enter a title.";
+
+        function checkTitle() {
+            const titleInput = document.getElementById('textbox');
+            if (titleInput.value === '') {
+                submitBtn.disabled = true;
+                submitBtn.title = "Please enter a title.";
+            } else {
+                submitBtn.disabled = false;
+            }
+        }
+    </script>
 </body>
 </html>
