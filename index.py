@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from database import initialize_database, save_news_summary, DB_FILEPATH
+from prompt_texts import GET_SUMARRY, GET_QUESTION, GET_QUESTION_EN
 import requests
 import os
 import sqlite3
@@ -14,30 +15,32 @@ data_template = {
     "max_tokens": 1000,
 }
 
-def generate_summary(prompt):
-    prompt_text = f"「{prompt}」という記事を1000トークンで収まる内容でわかりやすい日本語で要約してください。"
+def request_openai_api(prompt_text):
     data = {**data_template, "prompt": prompt_text}
 
-    response = requests.post("https://api.openai.com/v1/completions", headers=headers, json=data)
-    response_json = response.json()
-    summary = response_json["choices"][0]["text"].strip()
+    try:
+        response = requests.post("https://api.openai.com/v1/completions", headers=headers, json=data)
+        response.raise_for_status()  # ステータスコードが200以外の場合は例外を発生させる
 
+        response_json = response.json()
+        result = response_json["choices"][0]["text"].strip()
+
+    except (BaseException, Exception) as e:
+        raise ValueError("Invalid response from API: {}".format(str(e)))
+
+    return result
+
+def generate_summary(title):
+    prompt_text = GET_SUMARRY.format(title=title)
+    summary = request_openai_api(prompt_text)
     return summary
 
-def generate_question(prompt):
-    prompt_text1 = f"「{prompt}」の記事のジャンルにマッチした、小学生でも答えられるような身近な質問を1つ日本語で作って下さい。1000トークンで収まる内容でお願いします。"
-    data1 = {**data_template, "prompt": prompt_text1}
+def generate_question(title):
+    prompt_text1 = GET_QUESTION.format(title=title)
+    question = request_openai_api(prompt_text1)
 
-    response1 = requests.post("https://api.openai.com/v1/completions", headers=headers, json=data1)
-    response_json1 = response1.json()
-    question = response_json1["choices"][0]["text"].strip()
-
-    prompt_text2 = f"「{question}」を英語に直して下さい。1000トークンで収まる内容でお願いします。"
-    data2 = {**data_template, "prompt": prompt_text2}
-
-    response2 = requests.post("https://api.openai.com/v1/completions", headers=headers, json=data2)
-    response_json2 = response2.json()
-    question_en = response_json2["choices"][0]["text"].strip()
+    prompt_text2 = GET_QUESTION_EN.format(question=question)
+    question_en = request_openai_api(prompt_text2)
 
     return question, question_en
 
